@@ -20,8 +20,8 @@ public class ChatController {
 
 	private final ChatRepository chatRepository;
 
-	private final Map<DeferredResult<List<String>>, Integer> chatRequests =
-			new ConcurrentHashMap<DeferredResult<List<String>>, Integer>();
+	private final Map <DeferredResult <List<String>>, Integer> chatRequests =
+			new ConcurrentHashMap <DeferredResult <List<String>>, Integer>();
 
 
 	@Autowired
@@ -31,9 +31,9 @@ public class ChatController {
 
 	@RequestMapping(method=RequestMethod.GET)
 	@ResponseBody
-	public DeferredResult<List<String>> getMessages(@RequestParam int messageIndex) {
+	public DeferredResult <List<String>> getMessages(@RequestParam int messageIndex) {
 
-		final DeferredResult<List<String>> deferredResult = new DeferredResult<List<String>>(null, Collections.emptyList());
+		final DeferredResult <List<String>> deferredResult = new DeferredResult <List<String>> (null, Collections.emptyList());
 		this.chatRequests.put(deferredResult, messageIndex);
 
 		deferredResult.onCompletion(new Runnable() {
@@ -47,7 +47,6 @@ public class ChatController {
 		if (!messages.isEmpty()) {
 			deferredResult.setResult(messages);
 		}
-
 		return deferredResult;
 	}
 
@@ -57,8 +56,8 @@ public class ChatController {
 
 		this.chatRepository.addMessage(message);
 
-		for (Entry<DeferredResult<List<String>>, Integer> entry : this.chatRequests.entrySet()) {
-			List<String> messages = this.chatRepository.getMessages(entry.getValue());
+		for (Entry <DeferredResult <List<String>>, Integer> entry : this.chatRequests.entrySet()) {
+			List <String> messages = this.chatRepository.getMessages(entry.getValue());
 			entry.getKey().setResult(messages);
 		}
 	}
